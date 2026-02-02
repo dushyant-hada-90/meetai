@@ -9,6 +9,11 @@ export async function middleware(req: NextRequest) {
   })
   
   const { pathname, search } = req.nextUrl
+
+  // Allow unrestricted access to the landing page
+  if (pathname === "/") {
+    return NextResponse.next()
+  }
   
   const isProtectedRoute =
   pathname.startsWith("/agents") ||
