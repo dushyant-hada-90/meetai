@@ -7,7 +7,14 @@ interface Props {
 }
 
 const Layout = async ({ children }: Props) => {
-  
+  const session = await auth.api.getSession({
+          headers : await headers()
+        })
+
+  if (!session) {
+    console.log("session does not exist")
+    redirect("/sign-in")
+  }
 
   return (
     <SidebarProvider>

@@ -1,17 +1,15 @@
 import { db } from "@/db";
 import { agents, meetings } from "@/db/schema";
-import { getCustomerStateSafe, polarClient } from "@/lib/polar";
+import { polarClient } from "@/lib/polar";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 import { count, eq } from "drizzle-orm";
 
 export const premiumRouter = createTRPCRouter({
     getCurrentSubscription: protectedProcedure.query(async ({ ctx }) => {
-        const customer = await getCustomerStateSafe(ctx.auth.user.id)
-        if (!customer) {
-            return null
-        }
-
+        const customer = await polarClient.customers.getStateExternal({
+            externalId: ctx.auth.user.id
+        })
         const subscription = customer.activeSubscriptions[0]
         if (!subscription) {
             return null
@@ -32,8 +30,10 @@ export const premiumRouter = createTRPCRouter({
         return products.result.items
     }),
     getFreeUsage: protectedProcedure.query(async ({ ctx }) => {
-        const customer = await getCustomerStateSafe(ctx.auth.user.id)
-        const subscription = customer?.activeSubscriptions[0]
+        const customer = await polarClient.customers.getStateExternal({
+            externalId: ctx.auth.user.id,
+        })
+        const subscription = customer.activeSubscriptions[0]
 
         if (subscription) {
             return null
@@ -44,7 +44,7 @@ export const premiumRouter = createTRPCRouter({
                 count: count(meetings.id)
             })
             .from(meetings)
-            .where(eq(meetings.createdByUserId, ctx.auth.user.id))
+            .where(eq(meetings.userId, ctx.auth.user.id))
 
         const [userAgents] = await db.
             select({

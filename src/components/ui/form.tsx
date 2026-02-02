@@ -73,11 +73,8 @@ const FormItemContext = React.createContext<FormItemContextValue>(
   {} as FormItemContextValue
 )
 
-type FormItemProps = React.ComponentProps<"div"> & { id?: string }
-
-function FormItem({ className, id: providedId, ...props }: FormItemProps) {
-  const generatedId = React.useId()
-  const id = providedId ?? generatedId
+function FormItem({ className, ...props }: React.ComponentProps<"div">) {
+  const id = React.useId()
 
   return (
     <FormItemContext.Provider value={{ id }}>

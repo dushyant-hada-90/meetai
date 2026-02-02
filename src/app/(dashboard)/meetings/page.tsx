@@ -21,7 +21,7 @@ const Page = async ({searchParams}:Props) => {
     if (!session) redirect("/sign-in")
     
     const filters = await loadSearchParams(searchParams)
-    // console.log(filters)
+    console.log(filters)
 
     const queryClient = getQueryClient()
     await queryClient.prefetchQuery(trpc.meetings.getMany.queryOptions({
