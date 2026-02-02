@@ -184,7 +184,7 @@ export const CallLobby = ({ onJoin }: Props) => {
 
                     <button
                         onClick={() => onJoin({ audio: micOn, video: cameraOn })}
-                        className="mt-6 w-full rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500"
+                        className="mt-6 w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500"
                     >
                         Join Call
                     </button>
